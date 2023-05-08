@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpl-user-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: dpl-user-svc
+  strategy:
+    type: Recreate      
+  template:
+    metadata:
+      labels:
+        app: dpl-user-svc
+        run: dpl-user-svc
+        tier: backend
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: '3000'
+        - name: HOST
+          value: "0.0.0.0"
+        - name: MONGO_DB_URL
+          value: "mongodb+srv://raultoto:1GqtKvuuPDi0giCB@cluster0.f5qnme7.mongodb.net/?retryWrites=true&w=majority"
+        - name: MONGO_DB_NAME
+          value: 'test'
+        image: gcr.io/solid-shelter-279214/fitside/user-managment-service:latest
+        imagePullPolicy: Always
+        name: dpl-user-svc
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dpl-user-svc
+  name: dpl-user-svc
+spec:
+  clusterIP: None
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: dpl-user-svc

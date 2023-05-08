@@ -1,0 +1,289 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "users_managment_service",
+    "version": "1.0",
+    "description": "User_managment_microservice"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "summary": "create one user",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post-user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "get all user",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetUser"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-user"
+      }
+    },
+    "/user/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "put": {
+        "summary": "update one user",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "put-user-id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete one user",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete-user-id",
+        "tags": [
+          "user"
+        ]
+      },
+      "get": {
+        "summary": "find one user",
+        "operationId": "get-user-id",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetUser": {
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "firstName": "string",
+            "lastName": "string",
+            "profilePhoto": "string",
+            "email": "user@example.com",
+            "phoneNumber": "string",
+            "nacionality": "string",
+            "address": "string",
+            "dateOfBirth": "2019-08-24T14:15:22Z",
+            "createdAt": "2019-08-24T14:15:22Z",
+            "updatedAt": "2019-08-24T14:15:22Z"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "profilePhoto": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "nacionality": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "phoneNumber",
+          "dateOfBirth",
+          "createdAt",
+          "updatedAt"
+        ],
+        "title": ""
+      },
+      "CreateUser": {
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "firstName": "string",
+            "lastName": "string",
+            "profilePhoto": "string",
+            "email": "user@example.com",
+            "phoneNumber": "string",
+            "nacionality": "string",
+            "address": "string",
+            "dateOfBirth": "2019-08-24T14:15:22Z"
+          }
+        },
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "profilePhoto": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phoneNumber",
+            "example": "+51928371926"
+          },
+          "nacionality": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "phoneNumber",
+          "nacionality",
+          "dateOfBirth"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearerToken": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerToken": []
+    }
+  ]
+}
