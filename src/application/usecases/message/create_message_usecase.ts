@@ -1,6 +1,6 @@
-import { ChatProvider } from "src/application/services/chat_provider";
-import { Message, ChatType } from "../../../domain/entities/chat";
+import { ChatType, Message } from "../../../domain/entities/chat";
 import { ChatRepository } from "../../../domain/repositories/chat_repository";
+import { ChatProvider } from "../../services/chat_provider";
 
 export interface CreateMessageInput {
   chatId: string;
@@ -14,7 +14,7 @@ export class CreateMessageUseCase {
   async execute(message: CreateMessageInput) {
     try {
       const chat = await this.chatRepository.findAndInsertMessage(message.message, message.chatId);
-      if (chat.props.chatType === ChatType.person_to_bot) {
+      if (chat.props.chatType === ChatType.personToBot) {
         const messageRequest = {
           messages: [{
             role: "person",
@@ -22,9 +22,8 @@ export class CreateMessageUseCase {
           }]
         }
         const chatProvider = await this.chatProvider.chatCompletion(messageRequest);
-        const newMessage = {
-
-        }
+        // ce
+        console.log(chatProvider);          
       }
       return chat;
     } catch (error) {

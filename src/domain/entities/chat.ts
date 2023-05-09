@@ -34,21 +34,21 @@ enum ResourceType {
   video = 'video',
 }
 enum ChatHistoryAction{
-  message_added = 'message_added',
-  message_deleted = 'message_deleted',
-  message_edited = 'message_edited',
-  participant_added = 'participant_added',
-  participant_removed = 'participant_removed',
-  resource_added = 'resource_added',
-  resource_updated = 'resource_updated'
+  messageAdded = 'message_added',
+  messageDeleted = 'message_deleted',
+  messageEdited = 'message_edited',
+  participantAdded = 'participant_added',
+  participantRemoved = 'participant_removed',
+  resourceAdded = 'resource_added',
+  resourceUpdated = 'resource_updated'
 } 
 enum ChatBotModel{
-  gpt_api = 'gpt_api',
-  other_model = 'other_model'
+  gptApi = 'gpt_api',
+  otherModel = 'other_model'
 }
 export enum ChatType{
-  person_to_bot = 'person_to_bot',
-  person_to_person = 'person_to_person',
+  personToBot = 'person_to_bot',
+  personToPerson = 'person_to_person',
   group = 'group',
   mixed = 'mixed'
 } 
