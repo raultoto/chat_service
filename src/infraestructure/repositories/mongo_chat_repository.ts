@@ -16,6 +16,7 @@ export class MongoChatRepository implements ChatRepository {
       }
     });
   }
+
   async insertMessage(message: Message, chatId: string): Promise<Message> {
     try {
       await this._collection.updateOne(
@@ -27,12 +28,13 @@ export class MongoChatRepository implements ChatRepository {
       throw error;
     }
   }
+  
   async findAndInsertMessage(message: Message, chatId: string): Promise<Chat> {
     try {
       const result = await this._collection.findOneAndUpdate(
-        { chatId }, 
+        { chatId },
         { $push: { messages: message as never } },
-        { upsert: true, returnDocument: 'after'}
+        { upsert: true, returnDocument: 'after', projection: { messages: { $slice: -1 } } }
       )
       return ChatMapper.toEntity(result.value);
     } catch (error) {
@@ -40,6 +42,7 @@ export class MongoChatRepository implements ChatRepository {
       throw error;
     }
   }
+
   async createOne(chat: Chat): Promise<Chat> {
     try {
       const chatJson = ChatMapper.fromEntity(chat);
@@ -50,20 +53,45 @@ export class MongoChatRepository implements ChatRepository {
       throw error;
     }
   }
-  findOne(id: string): Promise<Chat> {
-    console.log(id)
-    throw new Error('Method not implemented.');
-  }
-  findAll(): Promise<Chat[]> {
-    throw new Error('Method not implemented.');
-  }
-  updateOne(chat: Chat): Promise<Chat> {
-    console.log(chat)
-    throw new Error('Method not implemented.');
-  }
-  deleteOne(id: string): Promise<boolean> {
-    console.log(id)
-    throw new Error('Method not implemented.');
+  
+  async findOne(id: string): Promise<Chat> {
+    try {
+      const result = await this._collection.findOne({ chatId: id });
+      return ChatMapper.toEntity(result);
+    } catch (error) {
+      Logger.error(error, this.constructor.name);
+      throw error;
+    }
   }
 
+  async findAll(): Promise<Chat[]> {
+    try {
+      const result = await this._collection.find().toArray();
+      return result.map((chat) => ChatMapper.toEntity(chat));
+    } catch (error) {
+      Logger.error(error, this.constructor.name);
+      throw error;
+    }
+  }
+
+  async updateOne(chat: Chat & { chatId: string }): Promise<Chat> {
+    try {
+      const chatJson = ChatMapper.fromEntity(chat);
+      await this._collection.updateOne({ chatId: chat.chatId }, { $set: chatJson });
+      return chat;
+    } catch (error) {
+      Logger.error(error, this.constructor.name);
+      throw error;
+    }
+  }
+
+  async deleteOne(id: string): Promise<boolean> {
+    try {
+      await this._collection.deleteOne({ chatId: id });
+      return true;
+    } catch (error) {
+      Logger.error(error, this.constructor.name);
+      throw error;
+    }
+  }
 }

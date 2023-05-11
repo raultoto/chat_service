@@ -2,7 +2,7 @@ import { Entity } from "../../shared/core/entity";
 
 type ISODate = string;
 
-enum ParticipantType {
+export enum ParticipantType {
   person = 'person',
   bot = 'bot'
 }
@@ -16,7 +16,7 @@ export enum ProficiencyLevel {
   intermediate = 'intermediate',
   advanced = 'advanced',
 }
-enum ContentType {
+export enum ContentType {
   text = 'text',
   audio = 'audio',
 }

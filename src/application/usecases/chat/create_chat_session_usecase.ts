@@ -29,4 +29,9 @@ export class CreateChatSessionUseCase {
     const chatCreated = await this.chatRepository.createOne(chat);
     return ChatMapper.fromEntity(chatCreated);
   }
+
+  async getAll() {
+    const chats = await this.chatRepository.findAll();
+    return chats.map((chat) => ChatMapper.fromEntity(chat));
+  }
 }

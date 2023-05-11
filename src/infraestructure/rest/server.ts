@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import container from '../../bootstrap/iocContainer';
 import { Logger } from '../logger/logger';
+
 /**
  * It registers the Swagger plugin, registers the routes, and starts the server
  * @param {FastifyInstance} fastify - FastifyInstance: The Fastify instance.
@@ -23,7 +24,9 @@ export const httpServer = async (fastify: FastifyInstance) => {
   fastify.delete('/user/:id', async (request, reply) => container.UserController.delete(request, reply));
 
   fastify.post('/chat', async (request, reply) => container.ChatController.create(request, reply));
-  fastify.post('/chat/:chatId/message', async (request, reply) => container.ChatController.insertMessage(request, reply));
+  fastify.post('/chat/:chatId/message', async (request, reply) => container.ChatController.insertMessage(request, reply, fastify));
+  fastify.get('/chats', async (request, reply) => container.ChatController.getAll(request, reply));
+
   fastify.io.on("connection", (socket) => {
     Logger.info(`Client connected: ${socket.id}`,'');
     socket.on('joinChat', (chatId) => {

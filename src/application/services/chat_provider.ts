@@ -1,17 +1,19 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { Logger } from "../../infraestructure/logger/logger";
 
+interface IChoice {
+  index: number;
+  message: {
+    role: string;
+    content: string;
+  };
+  finish_reason: string;
+}
 interface ChatCompletion {
   id: string;
   object: string;
   created: number;
-  choices: {
-    index: number;
-    message: {
-      role: string;
-      content: string;
-    };
-    finish_reason: string;
-  }[];
+  choices: IChoice[];
   usage: {
     prompt_tokens: number;
     completion_tokens: number;
@@ -30,31 +32,33 @@ export interface ChatProvider {
 }
 
 export class GptChatProvider implements ChatProvider {
-  constructor(){}
-  async chatCompletion(messageRequest: MessageRequest): Promise<ChatCompletion> {
-    const config: AxiosRequestConfig = {
+  private config: AxiosRequestConfig;
+  constructor() {
+    this.config = {
       url: 'https://api.openai.com/v1/chat/completions',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
-      data: {
-        model: 'gpt-3.5-turbo',
-        messages: messageRequest.messages
-      }
     };
+  }
+  async chatCompletion(messageRequest: MessageRequest): Promise<ChatCompletion> {
+    const data = {
+      model: 'gpt-3.5-turbo',
+      messages: messageRequest.messages
+    }
 
     try {
       const response = await axios.post(
-        config.url,
-        config.data,
+        this.config.url,
+        data,
         {
-          headers: config.headers
+          headers: this.config.headers
         }
       );
-      return response.data.choices[0];
+      return response.data as ChatCompletion; // choose the first choice
     } catch (error) {
-      console.error(error);
+      Logger.error(error, this.constructor.name);
       throw error;
     }
   }
