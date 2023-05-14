@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import container from '../../bootstrap/iocContainer';
 import { Logger } from '../logger/logger';
+import { SocketIoServer } from './socket';
 
 /**
  * It registers the Swagger plugin, registers the routes, and starts the server
@@ -16,6 +17,8 @@ export const httpServer = async (fastify: FastifyInstance) => {
     exposeRoute: true,
     routePrefix: 'docs'
   });
+  const socketServer = new SocketIoServer(fastify);
+
   /* Registering the user routes. */
   fastify.get('/user', async (request, reply) => container.UserController.getAll(request, reply));
   fastify.post('/user', async (request, reply) => container.UserController.create(request, reply));
@@ -24,31 +27,10 @@ export const httpServer = async (fastify: FastifyInstance) => {
   fastify.delete('/user/:id', async (request, reply) => container.UserController.delete(request, reply));
 
   fastify.post('/chat', async (request, reply) => container.ChatController.create(request, reply));
-  fastify.post('/chat/:chatId/message', async (request, reply) => container.ChatController.insertMessage(request, reply, fastify));
+  fastify.post('/chat/:chatId/message', async (request, reply) => container.ChatController.insertMessage(request, reply, socketServer.io));
   fastify.get('/chats', async (request, reply) => container.ChatController.getAll(request, reply));
 
-  fastify.io.on("connection", (socket) => {
-    Logger.info(`Client connected: ${socket.id}`,'');
-    socket.on('joinChat', (chatId) => {
-      socket.join(chatId);
-      Logger.info(`User joined chat: ${chatId}`,'');
-    });
-
-    socket.on('leaveChat', (chatId) => {
-      socket.leave(chatId.chatId);
-      Logger.info(`User left chat: ${chatId}`,'');
-    });
-
-    socket.on('sendMessage', (chatId, message) => {
-      socket.to(chatId).emit('receiveMessage', message);
-    });
-
-    // Add other events (updateMessage, deleteMessage, addResource, updateResource, deleteResource)
-
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
-    });
-  })
+  
   /* Listening to the port and host defined in the .env file. */
   fastify.listen({ port: Number(process.env.PORT), host: process.env.HOST }, (err, addr) => {
     Logger.info(`HTTP server listening on ${addr}`, 'Fastify');

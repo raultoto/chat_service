@@ -5,7 +5,7 @@ import { CreateChatSessionUseCase } from '../application/usecases/chat/create_ch
 import { CreateMessageUseCase } from '../application/usecases/message/create_message_usecase';
 import { ChatController } from '../infraestructure/controllers/chat_controller';
 import { UserController } from '../infraestructure/controllers/user_controller';
-import { MongoChatRepository } from '../infraestructure/repositories/mongo_chat_repository';
+import { MongoChatRepository } from '../infraestructure/repositories/mongodb_chat_repository';
 import { MongoDBUserRepository } from '../infraestructure/repositories/mongodb_user_repository';
 
 export interface Dependency {

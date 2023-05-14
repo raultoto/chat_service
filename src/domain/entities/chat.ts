@@ -59,7 +59,7 @@ interface LanguageSkills {
   writing: ProficiencyLevel;
 }
 
-interface PersonParticipant {
+export interface PersonParticipant {
   type: ParticipantType;
   userId: string;
   username: string;
@@ -67,7 +67,7 @@ interface PersonParticipant {
   status: UserStatus;
 }
 
-interface BotParticipant {
+export interface BotParticipant {
   type: ParticipantType;
   botId: string;
   botName: string;

@@ -34,7 +34,7 @@ export class MongoChatRepository implements ChatRepository {
       const result = await this._collection.findOneAndUpdate(
         { chatId },
         { $push: { messages: message as never } },
-        { upsert: true, returnDocument: 'after', projection: { messages: { $slice: -1 } } }
+        { upsert: true, returnDocument: 'after' }
       )
       return ChatMapper.toEntity(result.value);
     } catch (error) {
