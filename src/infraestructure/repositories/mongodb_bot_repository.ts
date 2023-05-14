@@ -1,4 +1,4 @@
-import { Bot } from "src/domain/entities/bot";
+import { Bot } from "../../domain/entities/bot";
 import { BotRepository } from "../../domain/repositories/bot_repository";
 
 export class MongoDbBotRepository implements BotRepository{
