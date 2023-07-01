@@ -18,7 +18,11 @@ async function run() {
   const server = Fastify({
     logger: transportDefinition
   });
-  server.register(fastifyWs)
+  server.register(fastifyWs, {
+    cors: {
+      origin: "*",
+    }
+  });
   createContainer({ database: db });
   httpServer(server);
 }

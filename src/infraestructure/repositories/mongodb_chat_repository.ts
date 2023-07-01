@@ -56,7 +56,10 @@ export class MongoChatRepository implements ChatRepository {
   
   async findOne(id: string): Promise<Chat> {
     try {
-      const result = await this._collection.findOne({ chatId: id });
+      const result = await this._collection.findOne(
+        { chatId: id },
+        { projection: { messages: 0, chatHistory: 0, resources: 0, participants: 0 } }
+      );
       return ChatMapper.toEntity(result);
     } catch (error) {
       Logger.error(error, this.constructor.name);

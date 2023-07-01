@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@fastify/swagger": "^8.3.0",
+    "@fastify/swagger-ui": "1.8.1",
     "@fastify/websocket": "^8.0.0",
     "axios": "^1.4.0",
     "bottlejs": "^2.0.1",

@@ -43,9 +43,15 @@ export class GptChatProvider implements ChatProvider {
     };
   }
   async chatCompletion(messageRequest: MessageRequest): Promise<ChatCompletion> {
+    const newMessages = messageRequest.messages.map((message) => {
+      return {
+        role: message.role === 'person' ? 'user' : 'system',
+        content: message.content
+      }
+    })
     const data = {
       model: 'gpt-3.5-turbo',
-      messages: messageRequest.messages
+      messages: newMessages,
     }
 
     try {
